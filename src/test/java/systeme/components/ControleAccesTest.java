@@ -32,11 +32,25 @@ public class ControleAccesTest {
     @Test
     public void CasSansInterrogation(){
         // ETANT DONNE un lecteur relié à une porte
-        var porteSpy = new PorteSpy();
-        var lecteurFake = new LecteurFake(porteSpy);
+        IPorte porteSpy = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy);
 
         // QUAND un badge est passé devant le lecteur sans que le lecteur ne soit interrogé
         lecteurFake.simulerDetectionBadge();
+
+        // ALORS la porte n'est pas deverrouillée
+        assertFalse(porteSpy.isOpen());
+    }
+
+    @Test
+    public void cas_sans_detection(){
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+
+        // QUAND on interroge ce lecteur sans qu'il ait détecté un badge
+        moteurOuverture.interrogerLecteur(lecteurFake);
 
         // ALORS la porte n'est pas deverrouillée
         assertFalse(porteSpy.isOpen());
