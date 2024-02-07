@@ -33,7 +33,6 @@ public class LecteurTest {
     @Test
     public void cas_sans_interrogation(){
         IPorte porte = new PorteSpy();
-        MoteurOuverture moteurOuverture = new MoteurOuverture(porte);
         ILecteur lecteur = new LecteurFake();
 
         //ETANT DONNE un lecteur relié à une porte
