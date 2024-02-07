@@ -132,4 +132,38 @@ public class ControleAccesTest {
         // ALORS la porte n'est pas deverouillée
         assertFalse(porteSpy.isOpen());
     }
+
+    @Test
+    public void cas_badge_invalide_sans_interrogation(){
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy);
+
+        // QUAND un badge INVALIDE est passé devant le lecteur sans que le lecteur ne soit interrogé
+        lecteurFake.simulerDetectionBadge(BadgePermission.INVALIDE);
+
+        // ALORS la porte n'est pas deverrouillée
+        assertFalse(porteSpy.isOpen());
+    }
+
+    @Test
+    public void cas_plusieurs_portes_badge_invalide(){
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = new PorteSpy();
+        IPorte porteSpy2 = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy, porteSpy2);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+
+
+        // QUAND un badge INVALIDE est passé devant le lecteur
+        lecteurFake.simulerDetectionBadge(BadgePermission.INVALIDE);
+
+        //ET on interroge ce lecteur
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        // ALORS les portes ne sont pas deverouillées
+        assertFalse(porteSpy.isOpen());
+        assertFalse(porteSpy2.isOpen());
+    }
+
 }
