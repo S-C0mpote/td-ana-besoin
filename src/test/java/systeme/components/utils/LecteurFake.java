@@ -2,6 +2,7 @@ package systeme.components.utils;
 
 import org.example.systeme.components.ILecteur;
 import org.example.systeme.components.IPorte;
+import org.example.systeme.permissions.BadgePermission;
 
 public class LecteurFake implements ILecteur {
     private final IPorte[] portes;
@@ -11,8 +12,9 @@ public class LecteurFake implements ILecteur {
         this.portes = portes;
     }
     @Override
-    public void simulerDetectionBadge() {
-        canOpen = true;
+    public void simulerDetectionBadge(BadgePermission badgePermission) {
+        if(BadgePermission.VALIDE.equals(badgePermission))
+            canOpen = true;
     }
 
     @Override
