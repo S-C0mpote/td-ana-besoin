@@ -1,9 +1,9 @@
 package systeme.components;
 
+import org.example.systeme.components.Badge;
 import org.example.systeme.components.ILecteur;
 import org.example.systeme.components.IPorte;
 import org.example.systeme.components.MoteurOuverture;
-import org.example.systeme.permissions.BadgePermission;
 import org.junit.Test;
 import systeme.components.utils.LecteurFake;
 import systeme.components.utils.PorteSpy;
@@ -21,7 +21,7 @@ public class ControleAccesTest {
         MoteurOuverture moteurOuverture = new MoteurOuverture();
 
         // QUAND un badge VALIDE est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(BadgePermission.VALIDE);
+        lecteurFake.simulerDetectionBadge(Badge.DEBLOQUE);
 
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
@@ -37,7 +37,7 @@ public class ControleAccesTest {
         ILecteur lecteurFake = new LecteurFake(porteSpy);
 
         // QUAND un badge VALIDE est passé devant le lecteur sans que le lecteur ne soit interrogé
-        lecteurFake.simulerDetectionBadge(BadgePermission.VALIDE);
+        lecteurFake.simulerDetectionBadge(Badge.DEBLOQUE);
 
         // ALORS la porte n'est pas deverrouillée
         assertFalse(porteSpy.isOpen());
@@ -67,7 +67,7 @@ public class ControleAccesTest {
 
 
         // QUAND un badge valide est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(BadgePermission.VALIDE);
+        lecteurFake.simulerDetectionBadge(Badge.DEBLOQUE);
 
         //ET on interroge ce lecteur
         moteurOuverture.interrogerLecteur(lecteurFake);
@@ -87,7 +87,7 @@ public class ControleAccesTest {
 
 
         // QUAND un badge VALIDE est passé devant le lecteur 2
-        lecteurFake2.simulerDetectionBadge(BadgePermission.VALIDE);
+        lecteurFake2.simulerDetectionBadge(Badge.DEBLOQUE);
 
         //ET on interroge les 2 lecteurs
         moteurOuverture.interrogerLecteur(lecteurFake, lecteurFake2);
@@ -106,7 +106,7 @@ public class ControleAccesTest {
         MoteurOuverture moteurOuverture = new MoteurOuverture();
 
         // QUAND un badge valide est passé devant le lecteur 2
-        lecteurFake2.simulerDetectionBadge(BadgePermission.VALIDE);
+        lecteurFake2.simulerDetectionBadge(Badge.DEBLOQUE);
 
         //ET on interroge les 2 lecteurs
         moteurOuverture.interrogerLecteur(lecteurFake, lecteurFake2);
@@ -124,7 +124,7 @@ public class ControleAccesTest {
         MoteurOuverture moteurOuverture = new MoteurOuverture();
 
         // QUAND un badge INVALIDE est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(BadgePermission.INVALIDE);
+        lecteurFake.simulerDetectionBadge(Badge.BLOQUE);
 
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
@@ -132,20 +132,6 @@ public class ControleAccesTest {
         // ALORS la porte n'est pas deverouillée
         assertFalse(porteSpy.isOpen());
     }
-
-    @Test
-    public void cas_badge_invalide_sans_interrogation(){
-        // ETANT DONNE un lecteur relié à une porte
-        IPorte porteSpy = new PorteSpy();
-        ILecteur lecteurFake = new LecteurFake(porteSpy);
-
-        // QUAND un badge INVALIDE est passé devant le lecteur sans que le lecteur ne soit interrogé
-        lecteurFake.simulerDetectionBadge(BadgePermission.INVALIDE);
-
-        // ALORS la porte n'est pas deverrouillée
-        assertFalse(porteSpy.isOpen());
-    }
-
     @Test
     public void cas_plusieurs_portes_badge_invalide(){
         // ETANT DONNE un lecteur relié à une porte
@@ -156,7 +142,7 @@ public class ControleAccesTest {
 
 
         // QUAND un badge INVALIDE est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(BadgePermission.INVALIDE);
+        lecteurFake.simulerDetectionBadge(Badge.BLOQUE);
 
         //ET on interroge ce lecteur
         moteurOuverture.interrogerLecteur(lecteurFake);
@@ -164,6 +150,28 @@ public class ControleAccesTest {
         // ALORS les portes ne sont pas deverouillées
         assertFalse(porteSpy.isOpen());
         assertFalse(porteSpy2.isOpen());
+    }
+
+    @Test
+    public void plusieurs_lecteurs_plusieurs_portes_invalide_valide(){
+        // ETANT DONNE chaque lecteur relié à sa porte
+        IPorte porteSpy = new PorteSpy();
+        IPorte porteSpy2 = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy);
+        ILecteur lecteurFake2 = new LecteurFake(porteSpy2);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+
+        // QUAND un badge valide est passé devant le lecteur 2
+        lecteurFake2.simulerDetectionBadge(Badge.DEBLOQUE);
+
+        // ET un badge INVALIDE est passé devant le lecteur 1
+        lecteurFake.simulerDetectionBadge(Badge.BLOQUE);
+        //ET on interroge les 2 lecteurs
+        moteurOuverture.interrogerLecteur(lecteurFake, lecteurFake2);
+
+        // ALORS seule la porte 2 est deverouillée
+        assertTrue(porteSpy2.isOpen());
+        assertFalse(porteSpy.isOpen());
     }
 
 }
