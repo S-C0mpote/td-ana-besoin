@@ -4,11 +4,11 @@ import org.example.systeme.components.ILecteur;
 import org.example.systeme.components.IPorte;
 
 public class LecteurFake implements ILecteur {
-    private final IPorte porte;
+    private final IPorte[] portes;
     private boolean canOpen = false;
 
-    public LecteurFake(IPorte porte) {
-        this.porte = porte;
+    public LecteurFake(IPorte... portes) {
+        this.portes = portes;
     }
     @Override
     public void simulerDetectionBadge() {
@@ -20,7 +20,7 @@ public class LecteurFake implements ILecteur {
         return canOpen;
     }
     @Override
-    public IPorte getPorte() {
-        return porte;
+    public IPorte[] getPorte() {
+        return portes;
     }
 }

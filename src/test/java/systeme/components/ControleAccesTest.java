@@ -55,4 +55,24 @@ public class ControleAccesTest {
         // ALORS la porte n'est pas deverrouillée
         assertFalse(porteSpy.isOpen());
     }
+
+    @Test
+    public void cas_plusieurs_portes(){
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = new PorteSpy();
+        IPorte porteSpy2 = new PorteSpy();
+        ILecteur lecteurFake = new LecteurFake(porteSpy, porteSpy2);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+
+
+        // QUAND un badge est passé devant le lecteur
+        lecteurFake.simulerDetectionBadge();
+
+        //ET on interroge ce lecteur
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        // ALORS les portes sont deverouillées
+        assertTrue(porteSpy.isOpen());
+        assertTrue(porteSpy2.isOpen());
+    }
 }
