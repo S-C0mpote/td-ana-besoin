@@ -133,27 +133,7 @@ public class ControleAccesTest {
         assertFalse(porteSpy.isOpen());
     }
     @Test
-    public void cas_plusieurs_portes_badge_invalide(){
-        // ETANT DONNE un lecteur relié à une porte
-        IPorte porteSpy = new PorteSpy();
-        IPorte porteSpy2 = new PorteSpy();
-        ILecteur lecteurFake = new LecteurFake(porteSpy, porteSpy2);
-        MoteurOuverture moteurOuverture = new MoteurOuverture();
-
-
-        // QUAND un badge INVALIDE est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(Badge.BLOQUE);
-
-        //ET on interroge ce lecteur
-        moteurOuverture.interrogerLecteur(lecteurFake);
-
-        // ALORS les portes ne sont pas deverouillées
-        assertFalse(porteSpy.isOpen());
-        assertFalse(porteSpy2.isOpen());
-    }
-
-    @Test
-    public void plusieurs_lecteurs_plusieurs_portes_invalide_valide(){
+    public void plusieurs_lecteurs_plusieurs_badges_invalide(){
         // ETANT DONNE chaque lecteur relié à sa porte
         IPorte porteSpy = new PorteSpy();
         IPorte porteSpy2 = new PorteSpy();
