@@ -11,7 +11,7 @@ public class NomPorteur {
 
     public NomPorteur(String nom) throws InvalideNameException {
         if(nom == null)
-            throw new InvalideNameException("Le nom n'est pas valide");
+            throw new InvalideNameException("Le nom ne peut pas etre null");
 
         Pattern pattern = Pattern.compile(REGEX_PATTERN);
         Matcher matcher = pattern.matcher(nom);

@@ -8,6 +8,7 @@ import org.example.systeme.exceptions.InvalideNameException;
 import org.example.systeme.utils.NomPorteur;
 import org.junit.Test;
 import org.mockito.Mockito;
+import systeme.components.utils.BadgeBuilder;
 import systeme.components.utils.LecteurFake;
 import systeme.components.utils.PorteSpy;
 
@@ -24,8 +25,7 @@ public class ControleAccesTest {
         IPorte porteSpy = new PorteSpy();
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
         // QUAND un badge non bloque et attribué est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
 
@@ -41,8 +41,8 @@ public class ControleAccesTest {
         // ETANT DONNE un lecteur relié à une porte
         IPorte porteSpy = new PorteSpy();
         ILecteur lecteurFake = new LecteurFake(porteSpy);
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
+
         // QUAND un badge debloque et attribué est passé devant le lecteur sans que le lecteur ne soit interrogé
         lecteurFake.simulerDetectionBadge(badge);
 
@@ -69,10 +69,10 @@ public class ControleAccesTest {
         // ETANT DONNE un lecteur relié à une porte
         IPorte porteSpy = new PorteSpy();
         IPorte porteSpy2 = new PorteSpy();
+
         ILecteur lecteurFake = new LecteurFake(porteSpy, porteSpy2);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
 
         // QUAND un badge DEBLOQUE et attribué est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
@@ -92,8 +92,8 @@ public class ControleAccesTest {
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         ILecteur lecteurFake2 = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
+
 
         // QUAND un badge non bloque et attribué est passé devant le lecteur 2
         lecteurFake2.simulerDetectionBadge(badge);
@@ -110,11 +110,13 @@ public class ControleAccesTest {
         // ETANT DONNE chaque lecteur relié à sa porte
         IPorte porteSpy = new PorteSpy();
         IPorte porteSpy2 = new PorteSpy();
+
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         ILecteur lecteurFake2 = new LecteurFake(porteSpy2);
+
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
+
         // QUAND un badge non bloque et attribué est passé devant le lecteur 2
         lecteurFake2.simulerDetectionBadge(badge);
 
@@ -132,7 +134,7 @@ public class ControleAccesTest {
         IPorte porteSpy = new PorteSpy();
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.BLOQUE;
+        Badge badge = BadgeBuilder.buildBadgeSansAttribution_BLOQUE();
 
         // QUAND un badge BLOQUE est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
@@ -151,10 +153,9 @@ public class ControleAccesTest {
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         ILecteur lecteurFake2 = new LecteurFake(porteSpy2);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.BLOQUE;
+        Badge badge = BadgeBuilder.buildBadgeSansAttribution_BLOQUE();
 
-        Badge badge2 = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge2 = BadgeBuilder.buildBadgeWithAttribution();
 
         // QUAND un badge non bloque et attribué est passé devant le lecteur 2
         lecteurFake2.simulerDetectionBadge(badge2);
@@ -174,8 +175,8 @@ public class ControleAccesTest {
         IPorte porteSpy = new PorteSpy();
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.BLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeAvecAttribution_BLOQUE();
+
         // QUAND un badge BLOQUE et attribué est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
 
@@ -192,8 +193,8 @@ public class ControleAccesTest {
         IPorte porteSpy = Mockito.spy(new PorteSpy());
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
-        badge.attribuer(new NomPorteur("MICHEL"));
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
+
         // QUAND un badge DEBLOQUE et attribué est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
 
@@ -222,7 +223,7 @@ public class ControleAccesTest {
         IPorte porteSpy = Mockito.spy(new PorteSpy());
         ILecteur lecteurFake = new LecteurFake(porteSpy);
         MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = Badge.DEBLOQUE;
+        Badge badge = BadgeBuilder.buildBadgeSansAttribution_DEBLOQUE();
 
         // QUAND un badge DEBLOQUE et non attribué est passé devant le lecteur
         lecteurFake.simulerDetectionBadge(badge);
