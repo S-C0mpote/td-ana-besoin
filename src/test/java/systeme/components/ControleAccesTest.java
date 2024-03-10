@@ -256,7 +256,7 @@ public class ControleAccesTest {
 
     @Test
     public void cas_badge_plusieur_porte_attribution() throws InvalideNameException {
-        // ETANT DONNE un lecteur relié à une porte
+        // ETANT DONNE un lecteur relié à plusieurs portes
         IPorte porteSpy = Mockito.spy(new PorteSpy());
         IPorte porteSpy2 = Mockito.spy(new PorteSpy());
         ILecteur lecteurFake = new LecteurFake(porteSpy,porteSpy2);
@@ -269,8 +269,9 @@ public class ControleAccesTest {
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
 
-        // la porte n'est pas deverouillée
+        // les portes ne sont pas deverouillées
         assertFalse(porteSpy.isOpen());
+        assertFalse(porteSpy2.isOpen());
 
         // ET si on attribue le badge
         badge.attribuer(new NomPorteur("MICHEL"));
@@ -281,17 +282,18 @@ public class ControleAccesTest {
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
 
-        //ALors la porte est ouverte
+        //Alors les portes sont ouverte
         assertTrue(porteSpy.isOpen());
         assertTrue(porteSpy2.isOpen());
 
-        //La porte n'a été ouverte que une seule fois
+        //Les portes n'ont été ouverte qu'une seule fois chacune
         verify(porteSpy, times(1)).ouvrir();
+        verify(porteSpy2, times(1)).ouvrir();
     }
 
     @Test
     public void cas_badge_plusieur_porte_retirer_attribution() throws InvalideNameException {
-        // ETANT DONNE un lecteur relié à une porte
+        // ETANT DONNE un lecteur relié à plusieurs portes
         IPorte porteSpy = Mockito.spy(new PorteSpy());
         IPorte porteSpy2 = Mockito.spy(new PorteSpy());
         ILecteur lecteurFake = new LecteurFake(porteSpy,porteSpy2);
@@ -304,8 +306,9 @@ public class ControleAccesTest {
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
 
-        // la porte est deverouillée
+        // les portes sont deverouillées
         assertTrue(porteSpy.isOpen());
+        assertTrue(porteSpy2.isOpen());
 
         // ET si on desattribue le badge
         badge.retirerAttribution();
@@ -316,7 +319,7 @@ public class ControleAccesTest {
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
 
-        //alors la porte n'a pas eu de signal d'ouverture
+        //alors les portes n'ont pas eu de signal d'ouverture
         verify(porteSpy, times(1)).ouvrir();
         verify(porteSpy2, times(1)).ouvrir();
     }
