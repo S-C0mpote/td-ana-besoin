@@ -187,6 +187,10 @@ public class ControleAccesTest {
         assertFalse(porteSpy.isOpen());
     }
 
+
+
+
+
     @Test
     public void cas_badge_retirer_attribution() throws InvalideNameException {
         // ETANT DONNE un lecteur relié à une porte
@@ -231,7 +235,7 @@ public class ControleAccesTest {
         // ET que ce lecteur est interrogé
         moteurOuverture.interrogerLecteur(lecteurFake);
 
-        // la porte est pas deverouillée
+        // la porte n'est pas deverouillée
         assertFalse(porteSpy.isOpen());
 
         // ET si on attribue le badge
@@ -249,4 +253,73 @@ public class ControleAccesTest {
         //La porte n'a été ouverte que une seule fois
         verify(porteSpy, times(1)).ouvrir();
     }
+
+    @Test
+    public void cas_badge_plusieur_porte_attribution() throws InvalideNameException {
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = Mockito.spy(new PorteSpy());
+        IPorte porteSpy2 = Mockito.spy(new PorteSpy());
+        ILecteur lecteurFake = new LecteurFake(porteSpy,porteSpy2);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+        Badge badge = BadgeBuilder.buildBadgeSansAttribution_DEBLOQUE();
+
+        // QUAND un badge DEBLOQUE et non attribué est passé devant le lecteur
+        lecteurFake.simulerDetectionBadge(badge);
+
+        // ET que ce lecteur est interrogé
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        // la porte n'est pas deverouillée
+        assertFalse(porteSpy.isOpen());
+
+        // ET si on attribue le badge
+        badge.attribuer(new NomPorteur("MICHEL"));
+
+        // QUE le badge passe devant le lecteur
+        lecteurFake.simulerDetectionBadge(badge);
+
+        // ET que ce lecteur est interrogé
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        //ALors la porte est ouverte
+        assertTrue(porteSpy.isOpen());
+        assertTrue(porteSpy2.isOpen());
+
+        //La porte n'a été ouverte que une seule fois
+        verify(porteSpy, times(1)).ouvrir();
+    }
+
+    @Test
+    public void cas_badge_plusieur_porte_retirer_attribution() throws InvalideNameException {
+        // ETANT DONNE un lecteur relié à une porte
+        IPorte porteSpy = Mockito.spy(new PorteSpy());
+        IPorte porteSpy2 = Mockito.spy(new PorteSpy());
+        ILecteur lecteurFake = new LecteurFake(porteSpy,porteSpy2);
+        MoteurOuverture moteurOuverture = new MoteurOuverture();
+        Badge badge = BadgeBuilder.buildBadgeWithAttribution();
+
+        // QUAND un badge DEBLOQUE et attribué est passé devant le lecteur
+        lecteurFake.simulerDetectionBadge(badge);
+
+        // ET que ce lecteur est interrogé
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        // la porte est deverouillée
+        assertTrue(porteSpy.isOpen());
+
+        // ET si on desattribue le badge
+        badge.retirerAttribution();
+
+        // QUE le badge passe devant le lecteur
+        lecteurFake.simulerDetectionBadge(badge);
+
+        // ET que ce lecteur est interrogé
+        moteurOuverture.interrogerLecteur(lecteurFake);
+
+        //alors la porte n'a pas eu de signal d'ouverture
+        verify(porteSpy, times(1)).ouvrir();
+        verify(porteSpy2, times(1)).ouvrir();
+    }
+
+
 }
