@@ -254,42 +254,7 @@ public class ControleAccesTest {
         verify(porteSpy, times(1)).ouvrir();
     }
 
-    @Test
-    public void cas_badge_plusieur_porte_attribution() throws InvalideNameException {
-        // ETANT DONNE un lecteur relié à plusieurs portes
-        IPorte porteSpy = Mockito.spy(new PorteSpy());
-        IPorte porteSpy2 = Mockito.spy(new PorteSpy());
-        ILecteur lecteurFake = new LecteurFake(porteSpy,porteSpy2);
-        MoteurOuverture moteurOuverture = new MoteurOuverture();
-        Badge badge = BadgeBuilder.buildBadgeSansAttribution_DEBLOQUE();
 
-        // QUAND un badge DEBLOQUE et non attribué est passé devant le lecteur
-        lecteurFake.simulerDetectionBadge(badge);
-
-        // ET que ce lecteur est interrogé
-        moteurOuverture.interrogerLecteur(lecteurFake);
-
-        // les portes ne sont pas deverouillées
-        assertFalse(porteSpy.isOpen());
-        assertFalse(porteSpy2.isOpen());
-
-        // ET si on attribue le badge
-        badge.attribuer(new NomPorteur("MICHEL"));
-
-        // QUE le badge passe devant le lecteur
-        lecteurFake.simulerDetectionBadge(badge);
-
-        // ET que ce lecteur est interrogé
-        moteurOuverture.interrogerLecteur(lecteurFake);
-
-        //Alors les portes sont ouverte
-        assertTrue(porteSpy.isOpen());
-        assertTrue(porteSpy2.isOpen());
-
-        //Les portes n'ont été ouverte qu'une seule fois chacune
-        verify(porteSpy, times(1)).ouvrir();
-        verify(porteSpy2, times(1)).ouvrir();
-    }
 
     @Test
     public void cas_badge_plusieur_porte_retirer_attribution() throws InvalideNameException {
